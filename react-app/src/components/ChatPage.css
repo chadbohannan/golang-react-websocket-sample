@@ -1,0 +1,52 @@
+
+
+section {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+header {
+    color: black;
+    font-size: 1.6em;
+    text-align: center;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    background: darkgrey;
+}
+  
+div {
+    flex: 1;
+    background: black;
+    color: white;
+    overflow: auto;
+}
+
+input {
+    font-size: 1.2em;
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+footer {
+    border-radius: 5px; 
+    margin: 10px;
+    padding: 10px;
+    background: rgb(51, 51, 51);
+    min-height: 30px;
+}
+
+.row {
+    margin: 20px;
+}
+
+.name-field {
+    color: yellow;
+}
+
+.message-field {
+    margin-left: 20px;
+    color: white;
+}

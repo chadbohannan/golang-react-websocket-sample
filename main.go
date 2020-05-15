@@ -61,8 +61,9 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// dump the chat log to new client
 	for e := msgLog.First(); e != nil; e = e.Next() {
-		conn.WriteJSON(e.Value) // dump the chat log to new client
+		conn.WriteJSON(e.Value)
 	}
 
 	// add client to broadcast pool
