@@ -44,7 +44,7 @@ func bcastRoutine() {
 		// cache the message for dumps to new clients
 		msgLog.PushBack(msg)
 		if msgLog.Len() > logLimit {
-			msgLog.Remove(msgLog.First())
+			msgLog.Remove(msgLog.Front())
 		}
 	}
 }
@@ -62,7 +62,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// dump the chat log to new client
-	for e := msgLog.First(); e != nil; e = e.Next() {
+	for e := msgLog.Front(); e != nil; e = e.Next() {
 		conn.WriteJSON(e.Value)
 	}
 
@@ -82,7 +82,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			bcastChatChan <- msg // queue them message for broadcast
 		} else {
-			log.Printf("client read err: %s\nclosing socket", err.Error(), conn.RemoteAddr().String())
+			log.Printf("client read err: %s\nclosing socket: %s", err.Error(), conn.RemoteAddr().String())
 			break // jk; not forever
 		}
 	}

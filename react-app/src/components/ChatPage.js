@@ -8,18 +8,8 @@ class ChatPage extends React.Component {
         this.state = {
             name: "",
             msg:"",
-            rowHistory: [
-                {
-                    timestamp: 1,
-                    name: "person one really long name",
-                    message: "test message one"
-                },
-                {
-                    timestamp: 2,
-                    name: "p two",
-                    message: "test message two"
-                },
-            ]
+            connected: false,
+            rowHistory: []
         };
     }
 
@@ -28,20 +18,23 @@ class ChatPage extends React.Component {
     }
     
     componentDidMount() {
-        this.scrollToBottom();
+        let loc = window.location;
+        if (loc.port) { // dev mode (local)
+            this.connect("ws://" + loc.hostname + ":" + loc.port + "/chat")
+          } else { // production
+            this.connect("wss://" + loc.hostname + "/chat")
+          }
     }
 
     sendMessage = () => {
-        let msgHist = this.state.rowHistory;
-        msgHist.push({
-            name:this.state.name || '<anon>',
-            message:this.state.msg || '<empty>',
-            timestamp: Date.now()});
+        let msg = {
+            name:this.state.name,
+            message:this.state.msg,
+            timestamp: Date.now()};
+        debugger
+        this.ws.send(JSON.stringify(msg));
         this.setState({ msg: "" });
-
-        this.setState({rowHistory:msgHist});
         this.scrollToBottom();
-        
     }
 
     onNameChanged = (event) => {
@@ -62,6 +55,31 @@ class ChatPage extends React.Component {
         }
       }
 
+    ws = null;
+    connect = (url) => {
+        console.log("Connecting: " + url);
+        this.ws = new WebSocket(url);
+        this.ws.onmessage = (event) => {
+            console.log(event);
+
+            let msg = JSON.parse(event.data)
+            let msgHist = this.state.rowHistory;
+            this.setState({rowHistory:msgHist.concat(msg)});
+            this.scrollToBottom();
+        };
+        this.ws.onerror = (event) => {
+            console.log(event);
+        };
+        this.ws.onopen = (even) => {
+            this.setState({connected: true});
+        };
+        this.ws.onclose = (event) => {
+            console.log(event);
+        };
+        return this.ws.close.bind(this.ws);
+    }
+
+
     render() {
         return (
             <FullHeight className="section">
@@ -69,7 +87,9 @@ class ChatPage extends React.Component {
                     EarnUp Challenge Chat
                 </header>
                 <div>
-                    {this.state.rowHistory.map((msg) => {return (
+                    {this.state.rowHistory.map((msg) => {
+                        debugger
+                        return (                        
                         <div className="row" key={msg.timestamp}>
                             <span className="name-field">{msg.name}</span>
                             <span className="message-field">{msg.message}</span>
@@ -93,7 +113,12 @@ class ChatPage extends React.Component {
                         onChange={this.onMessageChanged}
                         style={{flex:1, minWidth:"30%"}}
                     />
-                    <button style={{borderRadius:5, padding:10, fontSize:"1.2em"}} onClick={this.sendMessage}>Send</button>
+                    <button
+                        style={{borderRadius:5, padding:10, fontSize:"1.2em"}}
+                        onClick={this.sendMessage}
+                        disabled={!this.state.connected}>
+                        Send
+                    </button>
                 </footer>
             </FullHeight>
         );  
