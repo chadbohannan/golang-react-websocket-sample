@@ -82,7 +82,7 @@ class ChatPage extends React.Component {
 
     render() {
         return (
-            <FullHeight className="section">
+            <FullHeight>
                 <header>
                     EarnUp Challenge Chat
                 </header>
@@ -114,7 +114,6 @@ class ChatPage extends React.Component {
                         style={{flex:1, minWidth:"30%"}}
                     />
                     <button
-                        style={{borderRadius:5, padding:10, fontSize:"1.2em"}}
                         onClick={this.sendMessage}
                         disabled={!this.state.connected}>
                         Send
