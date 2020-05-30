@@ -1,6 +1,6 @@
 {
-  "short_name": "EarnUp Chat",
-  "name": "EarnUp Challenge Sample Web App",
+  "short_name": "Golang+React Chat",
+  "name": "Golang+React Websocket example application",
   "icons": [
     {
       "src": "favicon.ico",

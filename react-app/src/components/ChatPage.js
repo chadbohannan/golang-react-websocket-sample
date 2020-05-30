@@ -84,7 +84,7 @@ class ChatPage extends React.Component {
         return (
             <FullHeight>
                 <header>
-                    EarnUp Challenge Chat
+                    Golang+React Chat
                 </header>
                 <div>
                     {this.state.rowHistory.map((msg) => {

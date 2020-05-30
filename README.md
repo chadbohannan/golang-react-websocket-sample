@@ -1,4 +1,4 @@
-# earnup-chat-demo
+# golang-react-websocket-sample
 
 This solution is implemented with React 16 and Go 1.11. Later versions of these tools should work ok to build and run.
 
