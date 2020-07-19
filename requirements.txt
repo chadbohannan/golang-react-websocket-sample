@@ -1,0 +1,4 @@
+Flask==1.1.2
+Flask-Sockets==0.2.1
+gevent==20.6.2
+gevent-websocket==0.10.1

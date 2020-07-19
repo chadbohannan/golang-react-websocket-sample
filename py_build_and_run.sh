@@ -1,0 +1,8 @@
+#!/bin/bash
+cd react-app
+npm install
+npm run-script build
+cd ..
+pip3 install -r 'requirements.txt'
+echo 'install complete, running server'
+python3 main.py

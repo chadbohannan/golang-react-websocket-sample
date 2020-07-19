@@ -31,7 +31,6 @@ class ChatPage extends React.Component {
             name:this.state.name,
             message:this.state.msg,
             timestamp: Date.now()};
-        debugger
         this.ws.send(JSON.stringify(msg));
         this.setState({ msg: "" });
         this.scrollToBottom();
@@ -70,7 +69,8 @@ class ChatPage extends React.Component {
         this.ws.onerror = (event) => {
             console.log(event);
         };
-        this.ws.onopen = (even) => {
+        this.ws.onopen = (event) => {
+            console.log(event);
             this.setState({connected: true});
         };
         this.ws.onclose = (event) => {
@@ -82,13 +82,12 @@ class ChatPage extends React.Component {
 
     render() {
         return (
-            <FullHeight>
+            <FullHeight className="">
                 <header>
-                    Golang+React Chat
+                    React Chat
                 </header>
                 <div>
                     {this.state.rowHistory.map((msg) => {
-                        debugger
                         return (                        
                         <div className="row" key={msg.timestamp}>
                             <span className="name-field">{msg.name}</span>

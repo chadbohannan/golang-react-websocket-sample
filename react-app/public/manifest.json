@@ -1,6 +1,6 @@
 {
-  "short_name": "Golang+React Chat",
-  "name": "Golang+React Websocket example application",
+  "short_name": "React Chat",
+  "name": "React Websocket example application",
   "icons": [
     {
       "src": "favicon.ico",
