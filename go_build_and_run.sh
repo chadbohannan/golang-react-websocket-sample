@@ -1,4 +1,4 @@
-#!/bin/bashz
+#!/bin/bash
 cd react-app
 npm install
 npm run-script build
