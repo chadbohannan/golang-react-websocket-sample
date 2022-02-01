@@ -1,6 +1,8 @@
 # react-websocket-sample
+`Requires node version >= 14`
+The chat service serves the web client.
 
-The chat service serves the web client. Be sure to have the React tools installed before running.
+Use `npm start` to debug.
 
 ## Golang
 Implemented with React 16 and Go 1.11. Later versions of these tools should work ok to build and run.

@@ -98,7 +98,7 @@ func main() {
 	http.HandleFunc("/chat", socketHandler)
 	http.Handle("/", http.FileServer(http.Dir("./react-app/build")))
 
-	log.Printf("chat service is listening\n")
+	log.Printf("chat service is listening on port 8080\n")
 	if err := httpSrv.ListenAndServe(); err != nil {
 		log.Fatal("ListenAndServe: ", err.Error())
 	}
