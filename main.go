@@ -19,6 +19,7 @@ type ChatMessage struct {
 
 const (
 	logLimit = 20
+	port = "8080"
 )
 
 var (
@@ -26,7 +27,7 @@ var (
 	clientSet     = map[*websocket.Conn]bool{}
 	clientSetLock = sync.Mutex{}
 	bcastChatChan = make(chan *ChatMessage)
-	httpSrv       = &http.Server{Addr: ":8080"}
+	httpSrv       = &http.Server{Addr: ":"+port}
 )
 
 func msNow() int64 {
@@ -71,6 +72,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	clientSet[conn] = true
 	clientSetLock.Unlock()
 
+	defer(func()) { // remove client from broadcast pool
+		clientSetLock.Lock()
+		delete(clientSet, conn)
+		clientSetLock.Unlock()
+	})
+
 	for { // ever and ever
 		msg := &ChatMessage{}
 		if err := conn.ReadJSON(msg); err == nil {
@@ -80,17 +87,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			if len(msg.Name) == 0 {
 				msg.Name = conn.RemoteAddr().String()
 			}
-			bcastChatChan <- msg // queue them message for broadcast
+			bcastChatChan <- msg // enqueue message for broadcast
 		} else {
 			log.Printf("client read err: %s\nclosing socket: %s", err.Error(), conn.RemoteAddr().String())
 			break // jk; not forever
 		}
 	}
-
-	// remove client from broadcast pool
-	clientSetLock.Lock()
-	delete(clientSet, conn)
-	clientSetLock.Unlock()
 }
 
 func main() {
@@ -98,7 +100,7 @@ func main() {
 	http.HandleFunc("/chat", socketHandler)
 	http.Handle("/", http.FileServer(http.Dir("./react-app/build")))
 
-	log.Printf("chat service is listening on port 8080\n")
+	log.Printf("chat service is listening on port %s\n", port)
 	if err := httpSrv.ListenAndServe(); err != nil {
 		log.Fatal("ListenAndServe: ", err.Error())
 	}
